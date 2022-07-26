@@ -20,5 +20,6 @@ def insert_all(student_list: list):
     :param student_list: List of entity.student.Student
     :return:
     """
-    for student in student_list:
-        insert(student)
+    cur = DbConnection.get_cursor()
+    args_str = ','.join(cur.mogrify("(%s, %s, %s, %s, %s)", (student.id, student.name, student.birthday, student.sex, student.room)) for student in student_list)
+    cur.execute("INSERT INTO dorm_schema.student VALUES" + args_str)

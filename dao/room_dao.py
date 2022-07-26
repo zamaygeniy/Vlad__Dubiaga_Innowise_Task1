@@ -20,5 +20,6 @@ def insert_all(room_list: list):
     :param room_list: List of entity.room.Room
     :return:
     """
-    for room in room_list:
-        insert(room)
+    cur = DbConnection.get_cursor()
+    args_str = ','.join(cur.mogrify("(%s,%s)", (x.id, x.name)) for x in room_list)
+    cur.execute("INSERT INTO dorm_schema.room VALUES" + args_str)
